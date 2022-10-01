@@ -9,6 +9,19 @@ export interface PaginationResponse<T> {
   isLastPage: boolean;
 }
 
+export interface IMovie {
+  id: string;
+  posterUrl: string;
+  title: string;
+  type: string;
+  year: string;
+  isBookmark: boolean;
+}
+
+interface IFetchMovieProps {
+  searchString: string;
+}
+
 const movieKeys = {
   all: ["movie"] as const,
   lists: () => [...movieKeys.all, "list"] as const,
@@ -17,18 +30,24 @@ const movieKeys = {
   detail: (id: number) => [...movieKeys.details(), id] as const,
 };
 
-const useFetchMovie = (searchString: string) =>
+const useFetchMovie = ({ searchString }: IFetchMovieProps) =>
   useInfiniteQuery(
     movieKeys.lists(),
     ({ pageParam = 1 }: QueryFunctionContext) =>
       axios.get(`${API_MOVIE}`, {
-        params: { searchString, page: pageParam },
+        params: { s: searchString, page: pageParam },
       }),
     {
       getNextPageParam: (lastPage: any, pages: any) => {
-        return !lastPage.data.hasNext
-          ? undefined
-          : lastPage.config.params.pageParam + 1;
+        if (lastPage.data.Response === "False") return undefined;
+
+        if (
+          Number(pages[0].data.totalResults) <
+          lastPage.config.params.page * 10
+        )
+          return undefined;
+
+        return lastPage.config.params.page + 1;
       },
     },
   );
