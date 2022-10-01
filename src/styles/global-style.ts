@@ -10,7 +10,6 @@ const GlobalStyle = createGlobalStyle`
     html{
         font-family: "Noto-Sans", sans-serif;
         scroll-behavior: smooth;
-        background-color:#1e2022;
     }
     .fixed{
         width: 100%;
