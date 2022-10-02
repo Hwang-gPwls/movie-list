@@ -1,20 +1,22 @@
-import { Skeleton } from "@mui/material";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import useFetchMovie from "../api/movie";
 import Content from "../components/Content";
+import Modal from "../components/Modal";
 import SearchBar from "../components/SearchBar";
-import { searchKeyword } from "../recoil/movie";
+import { searchKeyword, modalOpen } from "../recoil/movie";
 
 const Search = () => {
+  //   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSeleectedItem] = useState("");
   const [keyword, setKeyword] = useRecoilState(searchKeyword);
   const { data, hasNextPage, isFetching, fetchNextPage, isError, refetch } =
     useFetchMovie({
       searchString: keyword,
     });
-  //   console.log(keyword);
-  //   console.log(hasNextPage);
+
+  console.log(modalOpen);
 
   useEffect(() => {
     refetch();
@@ -25,7 +27,7 @@ const Search = () => {
       ? data.pages.flatMap(({ data }) => data.Search)
       : [];
   }, [data]);
-  //   console.log(data);
+
   console.log(movies);
 
   type IntersectHandler = (
@@ -76,6 +78,14 @@ const Search = () => {
   return (
     <>
       <SearchBar />
+      {/* <button
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      >
+        모달 띄우기
+      </button> */}
+      {modalOpen && <Modal header={"aaaa"} selectedItem={selectedItem} />}
       <Container>
         {movies.length ? (
           movies.map((movie) => (
