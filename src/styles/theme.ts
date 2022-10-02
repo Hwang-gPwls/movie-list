@@ -2,8 +2,8 @@ export const theme = {
   color: {
     white: "#fff",
     black: "#000",
-    darkgray: "#434656",
     gray: "#a7aabc",
+    darkgray: "#434656",
     lightpurple: "#a6accd",
   },
 };
