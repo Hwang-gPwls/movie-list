@@ -1,48 +1,57 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { IconButton } from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import SearchIcon from "@mui/icons-material/Search";
 
 const Footer = () => {
-  const [isFocus, setIsFocus] = useState(false);
-
   return (
-    <Container>
-      <div className="nav">
-        <Link to={"/"} key={"search"}>
-          <SearchIcon
-            sx={{
-              color: "white",
-              fontSize: 40,
-            }}
-          />
-        </Link>
-        <Link to={"/bookmark"} key={"bookmark"}>
-          <BookmarkIcon
-            sx={{
-              color: "white",
-              fontSize: 40,
-            }}
-          />
-        </Link>
-      </div>
-    </Container>
+    <FooterBox>
+      <Container>
+        <div className="nav">
+          <Link to={"/"} key={"search"}>
+            <IconButton aria-label="search">
+              <SearchIcon
+                sx={{
+                  color: "white",
+                  fontSize: 40,
+                }}
+              />
+            </IconButton>
+          </Link>
+          <Link to={"/bookmark"} key={"bookmark"}>
+            <IconButton aria-label="bookmark">
+              <BookmarkIcon
+                sx={{
+                  color: "white",
+                  fontSize: 40,
+                }}
+              />
+            </IconButton>
+          </Link>
+        </div>
+      </Container>
+    </FooterBox>
   );
 };
 
+const FooterBox = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
 const Container = styled.div`
-  height: 7vh;
+  width: 30rem;
+  height: 4.5rem;
   padding: 1rem 8rem;
   position: fixed;
-  bottom: 0;
   left: 0;
   right: 0;
-  margin-bottom: 0.625rem;
-  margin-left: 0.625rem;
-  margin-right: 0.625rem;
+  bottom: 0;
+  margin: 0.625rem auto;
   border-radius: 5px;
-  background-color: #716e77;
+  background-color: ${({ theme }) => theme.color.darkgray};
+
   .nav {
     display: flex;
     align-items: center;

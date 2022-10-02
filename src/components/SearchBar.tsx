@@ -1,5 +1,5 @@
-import { ComponentProps, useRef, useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { ComponentProps, useEffect, useRef, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField } from "@mui/material";
@@ -8,22 +8,23 @@ import { searchKeywordState } from "../recoil/movie/atom";
 
 const useStyles = makeStyles({
   button: {
-    width: "8rem",
+    width: "9.5rem",
     backgroundColor: `#434656 !important`,
     color: "white",
     borderRadius: "0 10px 10px 0 !important",
+    zIndex: 999,
   },
   input: {
-    width: "26rem",
+    width: "35.5rem",
     backgroundColor: `#fff !important`,
     borderRadius: "10px 0 0 10px",
+    zIndex: 999,
   },
 });
 
 const SearchBar = () => {
   const classes = useStyles();
-
-  const setKeyword = useSetRecoilState(searchKeywordState);
+  const [keyword, setKeyword] = useRecoilState(searchKeywordState);
   const [inputVal, setInputVal] = useState("");
   const searchInput = useRef<HTMLInputElement>(null);
 
@@ -31,6 +32,10 @@ const SearchBar = () => {
     const { value } = e.target;
     setInputVal(value);
   };
+
+  useEffect(() => {
+    setInputVal(keyword);
+  }, []);
 
   return (
     <Container>
@@ -41,6 +46,7 @@ const SearchBar = () => {
         className={classes.input}
         ref={searchInput}
         onChange={onChange}
+        value={inputVal}
       />
 
       <Button
@@ -66,4 +72,5 @@ const Container = styled.div`
   justify-content: center;
   width: 100%;
   top: 7px;
+  z-index: 999;
 `;

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import StarIcon from "@mui/icons-material/Star";
-import defaultIMG from "../public/images/no-image.png";
-import { IMovie } from "../api/movie";
-import Modal from "./Modal";
 import { useRecoilState } from "recoil";
+import styled from "styled-components";
+import { IconButton } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import Modal from "./Modal";
+import { IMovie } from "../api/movie";
+import defaultIMG from "../public/images/no-image.png";
 import { bookmarkItemState } from "../recoil/movie/atom";
 
 const replaceItemAtIndex = (arr: IMovie[], index: number, newValue: IMovie) => {
@@ -64,47 +65,67 @@ const Content = ({ id, posterUrl, title, type, year }: IMovie) => {
           setModalOpen={setModalOpen}
         />
       )}
-      <Container key={id} id={id} onClick={contentClickHandler}>
-        <img
-          className="movie-poster"
-          alt="poster"
-          src={posterUrl}
-          onError={handleImgError}
-        />
-        <div className="movie-info">
-          <h2>{title}</h2>
-          <h2>{type}</h2>
-          <h2>{year}</h2>
-          {isCurContentBookmark ? (
-            <StarIcon
-              sx={{
-                color: "#f6ea8c",
-                fontSize: 40,
-              }}
-            />
-          ) : (
-            <StarIcon
-              sx={{
-                color: "gray",
-                fontSize: 40,
-              }}
-            />
-          )}
-          <button className="btn">Continue</button>
-        </div>
-      </Container>
+      <ContentBox>
+        <Container key={id} id={id} onClick={contentClickHandler}>
+          <img
+            className="movie-poster"
+            alt="poster"
+            src={posterUrl}
+            onError={handleImgError}
+          />
+          <div className="movie-info">
+            <h2 className="movie-info_title">{title}</h2>
+            <div className="movie-info_value">
+              <p className="movie-info_value__type">{type.toUpperCase()}</p>
+              <p className="movie-info_value__year">{year}</p>
+            </div>
+            <div className="movie-info_bookmark">
+              {isCurContentBookmark ? (
+                <IconButton aria-label="bookmark">
+                  <StarIcon
+                    sx={{
+                      color: "#f6ea8c",
+                      fontSize: 35,
+                    }}
+                  />
+                </IconButton>
+              ) : (
+                <IconButton aria-label="bookmark">
+                  <StarIcon
+                    sx={{
+                      color: "gray",
+                      fontSize: 35,
+                    }}
+                  />
+                </IconButton>
+              )}
+            </div>
+          </div>
+        </Container>
+      </ContentBox>
     </>
   );
 };
 
 export default Content;
 
+const ContentBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Container = styled.div`
-  background-color: #fff;
-  border-radius: 10px;
+  width: 32.75rem;
+  height: 15rem;
+  background: ${({ theme }) => theme.color.white};
+  border: 3px solid ${({ theme }) => theme.color.black};
+  border-radius: 5px;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
   display: flex;
-  width: 700px;
+  padding: 0.5rem;
   max-width: 100%;
   margin: 20px;
   overflow: hidden;
@@ -116,27 +137,41 @@ const Container = styled.div`
   }
 
   .movie-poster {
-    padding: 30px;
-    max-width: 250px;
+    width: 10.6875rem;
+    height: 100%;
+    object-fit: cover;
   }
 
   .movie-info {
+    width: 100%;
     padding: 30px;
     position: relative;
-    width: 100%;
-  }
 
-  .btn {
-    background-color: #2a265f;
-    border: 0;
-    border-radius: 50px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    color: #fff;
-    font-size: 16px;
-    padding: 12px 25px;
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    letter-spacing: 1px;
+    &_title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    &_value {
+      display: flex;
+      justify-content: end;
+      margin-top: 30px;
+
+      &__type {
+        font-weight: 400;
+      }
+
+      &__year {
+        margin-left: 10px;
+        font-weight: 600;
+      }
+    }
+
+    &_bookmark {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin: 0 10px 10px 0;
+    }
   }
 `;
