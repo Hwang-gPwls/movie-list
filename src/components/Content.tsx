@@ -8,18 +8,17 @@ import { IMovie } from "../api/movie";
 import defaultIMG from "../public/images/no-image.png";
 import { bookmarkItemState } from "../recoil/movie/atom";
 
-const replaceItemAtIndex = (arr: IMovie[], index: number, newValue: IMovie) => {
-  return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
-};
-
 const Content = ({ id, posterUrl, title, type, year }: IMovie) => {
   const [bookmarkItems, setBookmarkItems] = useRecoilState(bookmarkItemState);
-  const index = bookmarkItems.findIndex((item) => item.id === id);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isCurContentBookmark, setIsCurContentBookmark] = useState(
     bookmarkItems.some((item) => item.id === id),
   );
+
+  const handleAdd = (arr: IMovie[], newValue: IMovie) => {
+    return [...arr, newValue];
+  };
 
   const handleDelete = () => {
     setBookmarkItems((oldBookmarkItems) => {
@@ -33,7 +32,7 @@ const Content = ({ id, posterUrl, title, type, year }: IMovie) => {
 
   const handleBookmark = (isBookmark: boolean) => {
     if (isBookmark) {
-      const newItems = replaceItemAtIndex(bookmarkItems, index, {
+      const newItems = handleAdd(bookmarkItems, {
         id: id,
         posterUrl: posterUrl,
         title: title,
