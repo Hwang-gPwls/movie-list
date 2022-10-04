@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import useFetchMovie from "../api/movie";
@@ -7,6 +7,9 @@ import SearchBar from "../components/SearchBar";
 import { searchKeywordState } from "../recoil/movie/atom";
 
 const Search = () => {
+  const [beforeFirstID, setBeforeFirstID] = useState("");
+  const [isChangedMovies, setIsChangedMovies] = useState(false);
+
   const keyword = useRecoilValue(searchKeywordState);
 
   const { data, hasNextPage, isFetching, fetchNextPage, isError, refetch } =
@@ -23,6 +26,16 @@ const Search = () => {
       ? data.pages.flatMap(({ data }) => data.Search)
       : [];
   }, [data]);
+
+  useEffect(() => {
+    if (movies.length) {
+      if (movies[0].imdbID !== beforeFirstID) {
+        setBeforeFirstID(movies[0].imdbID);
+      }
+
+      setIsChangedMovies(movies[0].imdbID === beforeFirstID);
+    }
+  }, [movies, beforeFirstID]);
 
   type IntersectHandler = (
     entry: IntersectionObserverEntry,
@@ -73,7 +86,7 @@ const Search = () => {
     <>
       <SearchBar />
       <Container>
-        {movies.length ? (
+        {movies.length && isChangedMovies ? (
           movies.map((movie, idx) => (
             <Content
               key={idx}
