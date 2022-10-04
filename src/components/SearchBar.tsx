@@ -33,6 +33,16 @@ const SearchBar = () => {
     setInputVal(value);
   };
 
+  const handleOnClick = () => {
+    setKeyword(inputVal);
+  };
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleOnClick();
+    }
+  };
+
   useEffect(() => {
     setInputVal(keyword);
   }, []);
@@ -46,6 +56,7 @@ const SearchBar = () => {
         className={classes.input}
         ref={searchInput}
         onChange={onChange}
+        onKeyDown={onKeyPress}
         value={inputVal}
       />
 
@@ -53,9 +64,7 @@ const SearchBar = () => {
         variant="contained"
         startIcon={<SearchIcon />}
         className={classes.button}
-        onClick={() => {
-          setKeyword(inputVal);
-        }}
+        onClick={handleOnClick}
       >
         검색
       </Button>
