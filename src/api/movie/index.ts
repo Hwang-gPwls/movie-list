@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import { useInfiniteQuery, QueryFunctionContext } from "react-query";
 import { API_MOVIE } from "../../config/config";
 
